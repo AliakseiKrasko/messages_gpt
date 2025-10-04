@@ -13,6 +13,36 @@ function App() {
         localStorage.setItem('savedMessages', JSON.stringify(messages))
     }, [messages])
 
+    const savedMessages = async () => {
+        if (!input) return
+
+        const newMessages = [...messages, { role: 'user', content: input }]
+        setMessages(newMessages)
+        setInput('')
+        setLoading(true)
+
+        try {
+            const res = await fetch('http://api.openai.com/v1/chat/completions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer YOUR_API`,
+                },
+                body: JSON.stringify({
+                    model: 'gpt-5-Instant',
+                    messages: newMessages,
+                })
+            })
+            const data = await res.json()
+            console.log(data)
+            const reply = data.choices[0].message
+            setMessages((prev => [...prev, reply]))
+        } catch (err) {
+            console.log(err)
+        } finally {
+            setLoading(false)
+        }
+    }
     return (
         <div>
             <h1>Hello</h1>
