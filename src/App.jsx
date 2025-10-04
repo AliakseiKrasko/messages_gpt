@@ -22,16 +22,12 @@ function App() {
         setLoading(true)
 
         try {
-            const res = await fetch('http://api.openai.com/v1/chat/completions', {
-                method: 'POST',
+            const res = await fetch("http://localhost:3001/api/chat", {
+                method: "POST",
                 headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${import.meta.env.VITE_API_KEY}`,
+                    "Content-Type": "application/json",
                 },
-                body: JSON.stringify({
-                    model: "gpt-4-turbo",
-                    messages: newMessages,
-                })
+                body: JSON.stringify({ messages: newMessages }),
             })
             const data = await res.json()
             console.log(data)
